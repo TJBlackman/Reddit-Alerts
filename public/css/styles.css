@@ -1,0 +1,18 @@
+button {
+  outline: 0 !important;
+}
+#addNewSubreddit {
+  max-width: 800px;
+}
+#addNewSubreddit .col-xs-12 {
+  margin: 15px auto;
+}
+#addNewSubreddit .enterContact .input-group {
+  width: 100%;
+}
+#addNewSubreddit .enterContact .input-group .btn.dropdown-toggle {
+  width: 187px;
+}
+#addNewSubreddit .enterContact .input-group .btn.dropdown-toggle span {
+  margin-left: 5px;
+}
