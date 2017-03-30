@@ -1,21 +1,34 @@
 button {
   outline: 0 !important;
 }
-#addNewSubreddit {
+form#addNewSubreddit {
   max-width: 800px;
 }
-#addNewSubreddit .col-xs-12 {
+form#addNewSubreddit .col-xs-12 {
   margin: 15px auto;
 }
-#addNewSubreddit .enterContact .input-group {
+form#addNewSubreddit .enterContact .input-group {
   width: 100%;
 }
-#addNewSubreddit .enterContact .input-group .btn.dropdown-toggle {
+form#addNewSubreddit .enterContact .input-group .btn.dropdown-toggle {
   width: 187px;
 }
-#addNewSubreddit .enterContact .input-group ul.dropdown-menu {
+form#addNewSubreddit .enterContact .input-group ul.dropdown-menu {
   width: 100%;
 }
-#addNewSubreddit .enterContact .input-group ul.dropdown-menu li a:hover {
+form#addNewSubreddit .enterContact .input-group ul.dropdown-menu li a:hover {
   cursor: pointer;
+}
+form#signup {
+  width: 400px;
+  margin: 50px auto;
+  text-align: center;
+}
+form#signup .input-group {
+  width: 100%;
+  display: block;
+}
+form#signup .input-group input {
+  display: block;
+  width: 100%;
 }

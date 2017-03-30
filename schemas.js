@@ -16,10 +16,20 @@ var matchedPostSchema = new Schema({
     matchedOn:String
 });
 
+var userSchema = new Schema({
+    username: String,
+    password: String,
+    phone: String,
+    email: String,
+    twitter: String
+});
+
 var savedReddit = mongoose.model('savedReddit',savedRedditSchema);
 var matchedPost = mongoose.model('matchedPost',matchedPostSchema);
+var User = mongoose.model('user',userSchema);
 
 module.exports = {
-    'saved': savedReddit,
-    'matched':matchedPost
+    'subToMonitor': savedReddit,
+    'foundPosts':matchedPost,
+    'user':User
 };

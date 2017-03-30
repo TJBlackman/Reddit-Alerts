@@ -1,10 +1,11 @@
-const express = require('express')
-    app = express(),
-    path = require('path'),
-    bodyParser = require('body-parser'),
-    mongoose = require('mongoose'),
-    schemas = require('./schemas'),
-    request = require('request');
+const express   = require('express')
+    app         = express(),
+    path        = require('path'),
+    bodyParser  = require('body-parser'),
+    mongoose    = require('mongoose'),
+    schemas     = require('./schemas'),
+    request     = require('request'),
+    routes      = require('./routes');
 
 
 
@@ -19,29 +20,12 @@ mongoose.connect('mongodb://localhost/redditAlerts');
 app.use(express.static(path.join(__dirname,"./public")));
 app.use(bodyParser.json());
 
-// home page
-app.get('/', (req, res) => res.render('index'));
+routes(app);
 
-// receive request from broswer, create new modal instance,
-// save to DB, send updated Doc to browser
-app.post('/createalert', function(req, res, next){
-    new schemas.saved({
-        sub: req.body.subreddit,
-        keyWords: req.body.keyWords,
-        contact: req.body.contact,
-        contactMethod: req.body.contactMethod
-    })
-    .save()
-    .then(function(newlyCreatedSub){
-        console.log(newlyCreatedSub);
-        res.send('done');
-    })
-    .catch(next);
-});
 
 // get all subbreddit saves from DB
 function getSubs(){
-    schemas.saved.find({}).exec(function(err,data){
+    schemas.subToMonitor.find({}).exec(function(err,data){
         if (err) { console.log(err); return false; }
 
 
@@ -71,7 +55,7 @@ function getSubs(){
                 });
 
                 posts.forEach(function(obj){
-                    schemas.matched.create(obj)
+                    schemas.foundPosts.create(obj)
                     .then(function(x){console.log('saved: ', x)})
                     .catch(error)
                 });

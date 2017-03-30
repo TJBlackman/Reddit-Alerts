@@ -35,7 +35,7 @@ $(function(){
         });
     }());
 
-    // form collection
+    // create alert form collection
     (function(){
         var subredditInput = $('#subReddit'),
             targetWordsInput = $('#targetWords'),
@@ -63,7 +63,8 @@ $(function(){
                 method:'POST',
                 url:'/createalert',
                 data:JSON.stringify(results),
-                contentType:'application/json'
+                contentType:'application/json',
+                success: function(data){ console.log(data); }
             });
         });
 
@@ -73,4 +74,61 @@ $(function(){
             return array.filter(function(string){ if (string.length > 0) return true;});
         }
     }());
+
+    // sign up form collection
+    (function(){
+        var form = $('#signup'),
+            username = form.find('input[name=username]'),
+            password = form.find('input[name=password]'),
+            pConfirm = form.find('input[name=passwordConfirm]'),
+            phone    = form.find('input[name=phone]'),
+            email    = form.find('input[name=email]'),
+            twitter  = form.find('input[name=twitter]'),
+            submit   = form.find('button[type="submit"]'),
+            required = [username, password, pConfirm],
+            userData = {};
+
+        form.find('button[type="submit"]').on('click', validateAndSubmit)
+
+        function validateAndSubmit(e){
+            e.preventDefault();
+            if ( checkRequiredFields() ) {
+                alert('Some required fields empty');
+                return false;
+            }
+            if ( password.val() !== pConfirm.val() ) {
+                alert('Passwords do not match');
+                return false;
+            }
+
+            userData = {
+                username: valToLowerCase(username),
+                password: valToLowerCase(password),
+                phone: valToLowerCase(phone),
+                email: valToLowerCase(email),
+                twitter: valToLowerCase(twitter)
+            }
+
+            $.ajax({
+                method: 'POST',
+                url: '/newuser',
+                data: JSON.stringify(userData),
+                contentType: 'application/json',
+                success: function(data){ console.log(data); }
+            });
+        };
+
+        function checkRequiredFields(){
+            var failTest = true;
+            for (var i = 0, iMax = required.length; i < iMax; ++i){
+                if (required[i].val().length < 1) { break; }
+                if ( i === iMax - 1) { failTest = false; }
+            }
+            return failTest;
+        }
+
+        function valToLowerCase(el){ return el.val().trim().toLowerCase(); }
+
+    }());
+
 });
