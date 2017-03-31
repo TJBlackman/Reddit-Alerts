@@ -1,70 +1,76 @@
 $(function(){
 
-    // global variables
-    var form = $('#addNewSubreddit');
-
-    // Change subreddit placeholder
+    // === ADD NEW REDDIT ALERT FORM ====
+    // ==================================
     (function(){
-        var subreddits = ['askreddit','science','technology','explainlikeimfive','leagueoflegends','psbattle'],
-            i = 1,
-            subredditInput = $('#subReddit');
-        subredditInput.attr('placeholder',subreddits[0]);
-        setInterval(function(){
-            (i === subreddits.length - 1)   ?   (i = 0)   :   (++i);
-            subredditInput.attr('placeholder',subreddits[i]);
-        }, 2000);
-    }());
+        var form = $('#addAlert'),
+            inputSubreddit = form.find('input[name="subreddit"]'),
+            inputKeyWords  = form.find('input[name="key-words"]'),
+            inputContact   = form.find('input[name="contact-info"]'),
+            contactBtn     = form.find('button[name="contact-method"]'),
+            contactOptions = contactBtn.next('ul.dropdown-menu'),
+            submitBtn      = form.find('button[type="submit"]'),
+            validSubreddit = false,
+            subreddits     = ['askreddit','science','technology','explainlikeimfive','leagueoflegends','psbattle'];
 
-    // change alert via twitter, email, sms text
-    (function(){
-        var button = form.find('.enterContact button'),
-            newContact = button.next('ul.dropdown-menu'),
-            input = form.find('.enterContact input');
 
-        newContact.on('click','a',function(){
+        // == Change subreddit placeholder
+        (function(){
+            var i = 1;
+            inputSubreddit.attr('placeholder',subreddits[0]);
+            setInterval(function(){
+                (i === subreddits.length - 1)   ?   (i = 0)   :   (++i);
+                inputSubreddit.attr('placeholder',subreddits[i]);
+            }, 2000);
+        }());
+
+        // == Change alert via twitter, email, sms text
+        contactOptions.on('click','a',function(){
             var newSrc = $(this).data('src'),
-                placeholder;
-            button.data('src',newSrc).html(newSrc+' <span class="caret"></span>');
+                placeholder = '';
+            contactBtn
+                .data('src',newSrc)
+                .attr('data-src',newSrc)
+                .html(newSrc+' <span class="caret"></span>');
             switch(newSrc){
                 case 'Twitter':  placeholder = 'Enter your Twitter Handle!'; break;
                 case 'Email':    placeholder = 'Enter your email!';          break;
                 case 'Text SMS': placeholder = 'Enter your Phone number';    break;
                 default: placeholder = 'Enter Your Contact information';
             }
-            input.attr('placeholder',placeholder);
+            inputContact.attr('placeholder',placeholder);
         });
-    }());
 
-    // create alert form collection
-    (function(){
-        var subredditInput = $('#subReddit'),
-            targetWordsInput = $('#targetWords'),
-            contactInput = form.find('.enterContact input'),
-            saveBtn = form.find('#save');
-
-        saveBtn.on('click', function(event){
+        // create alert form collection
+        submitBtn.on('click', function(event){
             event.preventDefault();
-            var subredditValue = subredditInput.val().trim(),
-                targetWordsValue = targetWordsInput.val().trim(),
-                contactValue = contactInput.val().trim(),
-                contactType = $('.enterContact button').text().trim(),
+            var subredditValue = valToLowerCase(inputSubreddit),
+                keyWordsValue = valToLowerCase(inputKeyWords),
+                contactValue = valToLowerCase(inputContact),
+                contactType = contactBtn.data('src'),
                 results = {};
 
-            if (subredditValue.length   < 1) { subredditInput.focus();   return false; }
-            if (targetWordsValue.length < 1) { targetWordsInput.focus(); return false; }
-            if (contactValue.length     < 1) { contactInput.focus();     return false; }
+            // if (subredditValue.length < 1) { inputSubreddit.focus(); return false; }
+            // if (keyWordsValue.length  < 1) { inputKeyWords.focus();  return false; }
+            // if (contactValue.length   < 1) { inputContact.focus();   return false; }
+            if ( requiredFieldsAreEmpty([inputSubreddit,inputKeyWords,inputContact]) ) {
+                alert('Some required fields empty');
+                return false;
+            }
 
-            results.subreddit = subredditValue;
-            results.keyWords = parseKeywords(targetWordsValue);
-            results.contact = contactValue;
-            results.contactMethod = contactType;
+            results = {
+                subreddit: subredditValue,
+                keyWords: parseKeywords(keyWordsValue),
+                contact: contactValue,
+                contactMethod: contactType
+            }
 
+            // check for valid subreddit
             $.ajax({
-                method:'POST',
-                url:'/createalert',
-                data:JSON.stringify(results),
-                contentType:'application/json',
-                success: function(data){ console.log(data); }
+                dataType: "json",
+                url: 'https://www.reddit.com/r/' + subredditValue + '.json',
+                success: function(){ sendToDB(results); },
+                error:   function(){ alert('Subreddit not valid.'); }
             });
         });
 
@@ -73,9 +79,20 @@ $(function(){
             array.forEach(function(string, index){ array[index] = string.trim(); });
             return array.filter(function(string){ if (string.length > 0) return true;});
         }
-    }());
+        function sendToDB(results){
+            $.ajax({
+                method:'POST',
+                url:'/createalert',
+                data:JSON.stringify(results),
+                contentType:'application/json',
+                success: function(data){ console.log(data); }
+            });
+        }
+    }()); // end newRedditAlert form
 
-    // sign up form collection
+
+    // ==== SIGN UP FORM ====
+    // ======================
     (function(){
         var form = $('#signup'),
             username = form.find('input[name=username]'),
@@ -92,21 +109,24 @@ $(function(){
 
         function validateAndSubmit(e){
             e.preventDefault();
-            if ( checkRequiredFields() ) {
+            var pw = password.val().trim(),
+                pc = pConfirm.val().trim();
+
+            if ( requiredFieldsAreEmpty(required) ) {
                 alert('Some required fields empty');
                 return false;
             }
-            if ( password.val() !== pConfirm.val() ) {
+            if ( pw !== pc ) {
                 alert('Passwords do not match');
                 return false;
             }
 
             userData = {
                 username: valToLowerCase(username),
-                password: valToLowerCase(password),
+                password: pw,
                 phone: valToLowerCase(phone),
-                email: valToLowerCase(email),
-                twitter: valToLowerCase(twitter)
+                email: email.val().trim(),
+                twitter: twitter.val().trim()
             }
 
             $.ajax({
@@ -117,18 +137,50 @@ $(function(){
                 success: function(data){ console.log(data); }
             });
         };
+    }()); // END signup form
 
-        function checkRequiredFields(){
-            var failTest = true;
-            for (var i = 0, iMax = required.length; i < iMax; ++i){
-                if (required[i].val().length < 1) { break; }
-                if ( i === iMax - 1) { failTest = false; }
+    // ==== LOGIN FORM =====
+    // =====================
+    (function(){
+        var form = $('#login'),
+            username = form.find('input[name="username"]'),
+            password = form.find('input[name="password"]'),
+            submit   = form.find('button[type="submit"]'),
+            user     = {};
+
+        submit.on('click', function(e){
+            e.preventDefault();
+            if (requiredFieldsAreEmpty([username, password])) {
+                alert('Required fields'); return false;
             }
-            return failTest;
-        }
 
-        function valToLowerCase(el){ return el.val().trim().toLowerCase(); }
+            user = {
+                username: valToLowerCase(username),
+                password: password.val().trim()
+            }
 
+            $.ajax({
+                method: 'POST',
+                url: '/login',
+                data: JSON.stringify(user),
+                contentType: 'application/json',
+                success: function(data){ console.log(data); }
+            });
+        });
     }());
+
+    // ==== GLOBAL FUNCTIONS - to this file at least =====
+    function valToLowerCase(el){ return el.val().trim().toLowerCase(); }
+
+    // accepts array of dom elements and checks their values
+    // returns true if some of the fields have empty values
+    function requiredFieldsAreEmpty(array){
+        var failTest = true;
+        for (var i = 0, iMax = array.length; i < iMax; ++i){
+            if (array[i].val().length < 1) { break; }
+            if ( i === iMax - 1) { failTest = false; }
+        }
+        return failTest;
+    }
 
 });

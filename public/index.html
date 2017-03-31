@@ -19,39 +19,39 @@
     <![endif]-->
   </head>
   <body>
-    <form class="container" id="addNewSubreddit">
+    <form class="container" id="addAlert">
         <div class="row">
-            <div class="col-xs-12 enterSubreddit">
+            <div class="col-xs-12">
                 <h1 class="text-center">Create new Reddit Alert</h1>
                 <label for="basic-url">Enter subreddit:</label>
                 <div class="input-group">
-                    <span class="input-group-addon" id="url-type">https://www.reddit.com/r/</span>
-                    <input type="text" class="form-control" id="subReddit" aria-describedby="url-type" placeholder="">
+                    <span class="input-group-addon">https://www.reddit.com/r/</span>
+                    <input type="text" class="form-control" name="subreddit" placeholder="">
                 </div>
             </div>
-            <div class="col-xs-12 enterkeywords">
+            <div class="col-xs-12">
                 <div class="form-group">
-                    <label for="input">Target Words:</label>
-                    <input type="text" id="targetWords" class="form-control" placeholder="Coma seperated, words, and phrases">
+                    <label for="input">Key Words:</label>
+                    <input type="text" name="key-words" class="form-control" placeholder="Coma seperated, words, and phrases">
                 </div>
             </div>
-            <div class="col-xs-12 enterContact">
+            <div class="col-xs-12">
                 <label for="basic-url">Alert via:</label>
                 <div class="input-group">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-src="twitter">Twitter <span class="caret"></span></button>
+                        <button type="button" name="contact-method" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-src="twitter">Twitter <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a data-src="Twitter">Twitter</a></li>
                             <li><a data-src="Email">Email</a></li>
                             <li><a data-src="Text SMS">Text SMS</a></li>
                         </ul>
                     </div><!-- /btn-group -->
-                    <input type="text" class="form-control" placeholder="Enter your Twitter Handle!">
+                    <input type="text" class="form-control" name="contact-info" placeholder="Enter your Twitter Handle!">
                 </div><!-- /input-group -->
             </div>
             <div class="col-xs-12">
                 <p class="text-center">
-                    <button id="save" type="submit" class="btn btn-success btn-lg">Save!</button>
+                    <button type="submit" class="btn btn-success btn-lg">Save!</button>
                 </p>
             </div>
         </div>

@@ -1,34 +1,41 @@
 button {
   outline: 0 !important;
 }
-form#addNewSubreddit {
+form#addAlert {
   max-width: 800px;
 }
-form#addNewSubreddit .col-xs-12 {
+form#addAlert .col-xs-12 {
   margin: 15px auto;
 }
-form#addNewSubreddit .enterContact .input-group {
+form#addAlert .enterContact .input-group {
   width: 100%;
 }
-form#addNewSubreddit .enterContact .input-group .btn.dropdown-toggle {
+form#addAlert .enterContact .input-group .btn.dropdown-toggle {
   width: 187px;
 }
-form#addNewSubreddit .enterContact .input-group ul.dropdown-menu {
+form#addAlert .enterContact .input-group ul.dropdown-menu {
   width: 100%;
 }
-form#addNewSubreddit .enterContact .input-group ul.dropdown-menu li a:hover {
+form#addAlert .enterContact .input-group ul.dropdown-menu li a:hover {
   cursor: pointer;
 }
-form#signup {
+form#signup,
+form#login {
   width: 400px;
   margin: 50px auto;
   text-align: center;
 }
-form#signup .input-group {
+form#signup .input-group,
+form#login .input-group {
   width: 100%;
   display: block;
 }
-form#signup .input-group input {
+form#signup .input-group input,
+form#login .input-group input {
   display: block;
   width: 100%;
+}
+form#signup button[type="submit"],
+form#login button[type="submit"] {
+  margin: 10px auto;
 }

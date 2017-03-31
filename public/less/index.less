@@ -3,7 +3,7 @@ button {
     outline: 0 !important;
 }
 
-form#addNewSubreddit{
+form#addAlert{
     max-width: 800px;
     .col-xs-12 {
         margin: 15px auto;
@@ -26,7 +26,8 @@ form#addNewSubreddit{
     }
 }
 
-form#signup {
+form#signup,
+form#login {
     width: 400px;
     margin: 50px auto;
     text-align: center;
@@ -39,5 +40,8 @@ form#signup {
             display: block;
             width: 100%;
         }
+    }
+    button[type="submit"] {
+        margin: 10px auto;
     }
 }
