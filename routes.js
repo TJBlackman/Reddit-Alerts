@@ -9,6 +9,7 @@ module.exports = function(app){
 
 
 var homepage = function(req, res, next){
+    if (req.session) { console.log(req.session) }
     res.render('index');
 }
 
@@ -19,8 +20,13 @@ var login = function(req, res, next){
         if (error) {res.send(error); return false; }
         if (foundUser != null) {
             if ( foundUser.password === req.body.password ) {
-                var x = req.session;
-                console.log(x);
+                req.session.username = foundUser.username; // session
+
+                // get user's matched
+
+
+
+
                 response = 'User Authenticated!';
             } else {
                 response = 'User credentials do not match.';
@@ -35,7 +41,7 @@ var login = function(req, res, next){
 var newUser = function(req, res, next){
     schemas.user.findOne({'username':req.body.username}, function(error, foundUser){
         // return if username already exists
-        if (foundUser) { res.send('User already exists.'); return false; }
+        if ( foundUser ) { res.send('User already exists.'); return false; }
 
         // else create user!
         schemas.user.create({
@@ -50,13 +56,33 @@ var newUser = function(req, res, next){
     });
 }
 
+// newAlertSchema
 var createAlert = function(req, res, next){
-    schemas.subToMonitor.create({
-        sub: req.body.subreddit,
-        keyWords: req.body.keyWords,
-        contact: req.body.contact,
-        contactMethod: req.body.contactMethod
-    },function(err, user){
-        res.send('Alert created!')
+    if ( ! req.session.username ) {
+        res.send('User not logged in. Cannot create new Alert');
+        return false;
+    }
+    // look for existing alert by the same user
+    schemas.newSubreddit.findOne({sub:req.body.subreddit, createdBy:req.session.username}, function(err,foundReddit){
+        if (err) { console.log('error',err); return false; }
+
+        // if no results, create new alert
+        if (foundReddit === null){
+            var newAlert = schemas.newSubreddit.create({
+                sub: req.body.subreddit,
+                keyWords: req.body.keyWords,
+                contact: req.body.contact,
+                contactMethod: req.body.contactMethod,
+                createdBy: req.session.username
+            },function(err, alert){
+                res.send('Alert created for /r/'+alert.sub);
+            });
+        } else {
+            // else update everything but the subreddit itself
+            schemas.newSubreddit.findByIdAndUpdate(foundReddit._id, {keyWords: req.body.keyWords, contact: req.body.contact, contactMethod: req.body.contactMethod}, {new:true}, function(err, updatedReddit){
+                if (err) console.log('error', err);
+                res.send('Updated alert for /r/'+foundReddit.sub);
+            });
+        }
     });
 }

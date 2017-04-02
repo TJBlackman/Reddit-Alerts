@@ -1,11 +1,19 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var savedRedditSchema = new Schema({
+var newRedditAlertSchema = new Schema({
     sub: String,
     keyWords: Array,
     contact: String,
-    contactMethod: String
+    contactMethod: String,
+    createdBy: {
+        type: String,
+        required: true
+    },
+    matchedPosts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'matchedPost'
+    }]
 });
 
 var matchedPostSchema = new Schema({
@@ -13,7 +21,11 @@ var matchedPostSchema = new Schema({
     urlComments:String,
     url: String,
     author: String,
-    matchedOn:String
+    matchedOn:String,
+    createdBy: {
+        type: String,
+        required: true
+    }
 });
 
 var userSchema = new Schema({
@@ -24,12 +36,12 @@ var userSchema = new Schema({
     twitter: String
 });
 
-var savedReddit = mongoose.model('savedReddit',savedRedditSchema);
+var newRedditAlert = mongoose.model('newRedditAlert',newRedditAlertSchema);
 var matchedPost = mongoose.model('matchedPost',matchedPostSchema);
 var User = mongoose.model('user',userSchema);
 
 module.exports = {
-    'subToMonitor': savedReddit,
+    'newSubreddit': newRedditAlert,
     'foundPosts':matchedPost,
     'user':User
 };
