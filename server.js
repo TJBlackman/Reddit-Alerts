@@ -7,7 +7,9 @@ const express    = require('express')
     routes       = require('./routes'),
     session      = require('express-session'),
     queryReddit  = require('./queryReddit'),
-    minute       = 60000;
+    minute       = 60000,
+    config       = require('./config'),
+    sendAlert    = require('./sendAlert');
 
 
 
@@ -31,10 +33,6 @@ app.use(session({
 }));
 
 routes(app);
-
-// this queries reddit
-// queryReddit();
-
 
 // app is listening!
 app.listen(8080, function(){

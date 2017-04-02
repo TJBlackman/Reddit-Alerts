@@ -1,13 +1,5 @@
 var schemas = require('./schemas');
 
-module.exports = function(app){
-    app.get('/', homepage);
-    app.post('/createalert', createAlert);
-    app.post('/newuser', newUser);
-    app.post('/login', login);
-}
-
-
 var homepage = function(req, res, next){
     if (req.session) { console.log(req.session) }
     res.render('index');
@@ -85,4 +77,12 @@ var createAlert = function(req, res, next){
             });
         }
     });
+}
+
+
+module.exports = function(app){
+    app.get('/', homepage);
+    app.post('/createalert', createAlert);
+    app.post('/newuser', newUser);
+    app.post('/login', login);
 }
