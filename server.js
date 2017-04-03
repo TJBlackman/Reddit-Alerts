@@ -1,11 +1,11 @@
 const express    = require('express')
     app          = express(),
+    session      = require('express-session'),
     path         = require('path'),
     bodyParser   = require('body-parser'),
     mongoose     = require('mongoose'),
     schemas      = require('./schemas'),
     routes       = require('./routes'),
-    session      = require('express-session'),
     queryReddit  = require('./queryReddit'),
     minute       = 60000,
     config       = require('./config'),
