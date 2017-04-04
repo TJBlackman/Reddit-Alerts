@@ -1,6 +1,26 @@
 const nodemailer    = require('nodemailer'),
     config          = require('./config'),
-    twilio          = require('twilio');
+    twilio          = require('twilio'),
+    Twit            = require('twit'),
+    twitterClient   = new Twit({
+        consumer_key: config.twitter.consumerKey,
+        consumer_secret: config.twitter.consumerSecret,
+        access_token: config.twitter.accessToken,
+        access_token_secret: config.twitter.tokenSecret
+    });
+
+
+// === Twitter Function ====
+// =========================
+var sendTweet = function(){
+    twitterClient.post('statuses/update', {status: 'Hello World!'}, function(err, data, resp){
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Twitter Sent!');
+        }
+    });
+}
 
 
 // ==== EMAIL ALERT SENDER ====
@@ -43,5 +63,6 @@ const sendText = function(phone, alert){
 
 module.exports = {
     email: sendEmail,
-    text: sendText
+    text: sendText,
+    tweet: sendTweet
 }
