@@ -1,7 +1,6 @@
 var schemas = require('./schemas');
 
 var homepage = function(req, res, next){
-    if (req.session) { console.log(req.session) }
     res.render('index');
 }
 
@@ -12,14 +11,11 @@ var login = function(req, res, next){
         if (error) {res.send(error); return false; }
         if (foundUser != null) {
             if ( foundUser.password === req.body.password ) {
-                req.session.username = foundUser.username; // session
-
-                // get user's matched
-
-
-
-
-                response = 'User Authenticated!';
+                req.session.u = foundUser.username;
+                req.session.p    = foundUser.phone;
+                req.session.e    = foundUser.email;
+                req.session.t  = foundUser.twitter;
+                response = 'success';
             } else {
                 response = 'User credentials do not match.';
             }
@@ -43,19 +39,19 @@ var newUser = function(req, res, next){
             email: req.body.email,
             twitter: req.body.twitter
         }, function(err, user){
-            res.send('User created!')
+            res.send('success')
         });
     });
 }
 
 // newAlertSchema
 var createAlert = function(req, res, next){
-    if ( ! req.session.username ) {
+    if ( ! req.session.u ) {
         res.send('User not logged in. Cannot create new Alert');
         return false;
     }
     // look for existing alert by the same user
-    schemas.newSubreddit.findOne({sub:req.body.subreddit, createdBy:req.session.username}, function(err,foundReddit){
+    schemas.newSubreddit.findOne({sub:req.body.subreddit, createdBy:req.session.u}, function(err,foundReddit){
         if (err) { console.log('error',err); return false; }
 
         // if no results, create new alert
@@ -65,24 +61,50 @@ var createAlert = function(req, res, next){
                 keyWords: req.body.keyWords,
                 contact: req.body.contact,
                 contactMethod: req.body.contactMethod,
-                createdBy: req.session.username
+                createdBy: req.session.u
             },function(err, alert){
                 res.send('Alert created for /r/'+alert.sub);
             });
         } else {
             // else update everything but the subreddit itself
-            schemas.newSubreddit.findByIdAndUpdate(foundReddit._id, {keyWords: req.body.keyWords, contact: req.body.contact, contactMethod: req.body.contactMethod}, {new:true}, function(err, updatedReddit){
-                if (err) console.log('error', err);
-                res.send('Updated alert for /r/'+foundReddit.sub);
-            });
+            schemas.newSubreddit.findByIdAndUpdate(
+                foundReddit._id,
+                {keyWords: req.body.keyWords},
+                {new:true},
+                function(err, updatedReddit){
+                    if (err) console.log('error', err);
+                    res.send('Updated alert for /r/'+foundReddit.sub);
+                }
+            );
         }
+    });
+}
+
+var checkLogin = function(req, res, next){
+    var loggedIn = false;
+    if (req.session.u) { loggedIn = true; }
+    res.send(loggedIn);
+}
+
+var userData = function(req, res, next){
+    (!req.session.u) ? res.send('Unauthorized') : res.send(req.session[req.body.data]);
+}
+
+var populateDashboard = function(req, res, next){
+    if (!req.session.u) {res.send('Unauthorized'); return false; }
+
+    schemas.notifications.find({'createdBy':req.session.u}, function(er, list){
+        res.send(list);
     });
 }
 
 
 module.exports = function(app){
     app.get('/', homepage);
+    app.get('/checklogin', checkLogin);
+    app.get('/populateDashboard', populateDashboard)
     app.post('/createalert', createAlert);
     app.post('/newuser', newUser);
     app.post('/login', login);
+    app.post('/getUserData', userData)
 }

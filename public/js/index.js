@@ -46,14 +46,10 @@ $(function(){
             event.preventDefault();
             var subredditValue = valToLowerCase(inputSubreddit),
                 keyWordsValue = valToLowerCase(inputKeyWords),
-                contactValue = valToLowerCase(inputContact),
                 contactType = contactBtn.data('src'),
                 results = {};
 
-            // if (subredditValue.length < 1) { inputSubreddit.focus(); return false; }
-            // if (keyWordsValue.length  < 1) { inputKeyWords.focus();  return false; }
-            // if (contactValue.length   < 1) { inputContact.focus();   return false; }
-            if ( requiredFieldsAreEmpty([inputSubreddit,inputKeyWords,inputContact]) ) {
+            if ( requiredFieldsAreEmpty([inputSubreddit,inputKeyWords]) ) {
                 alert('Some required fields empty');
                 return false;
             }
@@ -61,7 +57,6 @@ $(function(){
             results = {
                 subreddit: subredditValue,
                 keyWords: parseKeywords(keyWordsValue),
-                contact: contactValue,
                 contactMethod: contactType
             }
 
@@ -134,7 +129,9 @@ $(function(){
                 url: '/newuser',
                 data: JSON.stringify(userData),
                 contentType: 'application/json',
-                success: function(data){ console.log(data); }
+                success: function(data){
+                    data === 'success' ? goToDashboard() : alert(data);
+                }
             });
         };
     }()); // END signup form
@@ -164,12 +161,63 @@ $(function(){
                 url: '/login',
                 data: JSON.stringify(user),
                 contentType: 'application/json',
-                success: function(data){ console.log(data); }
+                success: function(data){ handleResponse(data); }
             });
         });
+
+        function handleResponse(str){
+            if (str === 'success') {
+                RA.state('dashboard');
+                $.ajax({
+                    method: 'GET',
+                    url: '/populateDashboard',
+                    success: function(data){ console.log(data); }
+                });
+            } else {
+                alert(str);
+            }
+        }
     }());
 
+    // ==== DASHBOARD =====
+    // ====================
+    (function(){
+        var dashboard = $('.dashboard');
+
+        dashboard.on('click','.panel-header',showPanelResults);
+        dashboard.on('click','.settingsBtn',showPanelSettings);
+
+        // show and hide results panel
+        function showPanelResults(event){
+            var results  = $(this).siblings('.panel-results'),
+                settings = $(this).siblings('.panel-settings');
+            if (results.is(':visible') && settings.is(':visible')){
+                settings.slideUp({
+                    duration: 125,
+                    easing: 'linear',
+                    complete: function(){
+                        results.slideUp({
+                            duration: 125,
+                            easing: 'linear'
+                        });
+                    }
+                });
+            } else if (results.is(':visible')) {
+                results.slideUp(250);
+            } else {
+                results.slideDown(250);
+            }
+        }
+        function showPanelSettings(event){
+            var settings = $(this).closest('.panel').find('.panel-settings');
+            settings.is(':visible') ? settings.slideUp(250) : settings.slideDown(250);
+        }
+    }())
+
+
     // ==== GLOBAL FUNCTIONS - to this file at least =====
+    // ===================================================
+
     function valToLowerCase(el){ return el.val().trim().toLowerCase(); }
 
     // accepts array of dom elements and checks their values
@@ -181,6 +229,17 @@ $(function(){
             if ( i === iMax - 1) { failTest = false; }
         }
         return failTest;
+    }
+
+    var body = $('body');
+    // change state of application, if state exists
+    var changeState = function(state){
+        body.attr('data-state', state);
+    }
+
+    // global object
+    return RA = {
+        state: changeState
     }
 
 });

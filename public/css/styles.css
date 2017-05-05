@@ -1,41 +1,229 @@
-button {
-  outline: 0 !important;
+#state[data-state="login"] .landing,
+#state[data-state="login"] #login,
+#state[data-state="login"] header .menu .login {
+  display: block;
 }
-form#addAlert {
-  max-width: 800px;
+#state[data-state="signup"] .landing,
+#state[data-state="signup"] #signup,
+#state[data-state="signup"] header .menu .signup {
+  display: block;
 }
-form#addAlert .col-xs-12 {
-  margin: 15px auto;
+#state[data-state="dashboard"] header .menu .dashboard,
+#state[data-state="dashboard"] .dashboard {
+  display: block;
 }
-form#addAlert .enterContact .input-group {
+.dashboard {
+  display: none;
+}
+.dashboard form#addAlert {
+  display: block;
   width: 100%;
+  margin: 0 auto;
 }
-form#addAlert .enterContact .input-group .btn.dropdown-toggle {
-  width: 187px;
+.dashboard form#addAlert :after {
+  display: table;
+  content: "";
+  clear: both;
 }
-form#addAlert .enterContact .input-group ul.dropdown-menu {
-  width: 100%;
+.dashboard form#addAlert > div {
+  padding: 0 3px;
 }
-form#addAlert .enterContact .input-group ul.dropdown-menu li a:hover {
+.dashboard form#addAlert .input-group span {
+  padding-right: 5px;
+  font-size: 24px;
+}
+.dashboard form#addAlert .input-group input[name="subreddit"] {
+  padding-left: 3px;
+}
+.dashboard form#addAlert input {
+  height: 46px;
+  font-size: 24px;
+}
+.dashboard .savedSubs {
+  margin-top: 20px;
+}
+.dashboard .savedSubs .panel .panel-header {
+  font-size: 26px;
+  line-height: 1;
+  padding: 10px;
+  color: orangered;
+}
+.dashboard .savedSubs .panel .panel-header span {
   cursor: pointer;
 }
-form#signup,
-form#login {
-  width: 400px;
-  margin: 50px auto;
+.dashboard .savedSubs .panel .panel-results {
+  display: none;
+}
+.dashboard .savedSubs .panel .panel-results .table {
+  margin-bottom: 5px;
+}
+.dashboard .savedSubs .panel .panel-results .table > tbody > tr:nth-last-child(1) > td {
+  border-bottom: 1px solid #ddd;
+}
+.dashboard .savedSubs .panel .panel-results .settingsBtn {
+  background-color: transparent;
+  border: none;
+  color: #337ab7;
+  margin-right: 0;
+  margin-left: auto;
+  display: block;
+  outline: 0;
+}
+.dashboard .savedSubs .panel .panel-results .settingsBtn:before {
+  content: "\f0ad";
+  font-family: FontAwesome;
+  line-height: 1;
+  margin: 0px 4px 0 0;
+  font-size: 14px;
+}
+.dashboard .savedSubs .panel .panel-settings {
+  padding: 10px;
+  display: none;
+}
+.dashboard .savedSubs .panel .panel-settings .settings-label {
+  font-size: 14px;
+  border-bottom: 1px solid grey;
+}
+.dashboard .savedSubs .panel .panel-settings textarea {
+  display: block;
+  height: 100px;
+  width: 100%;
+  resize: none;
+}
+.dashboard .savedSubs .panel .panel-settings .alert-methods {
+  list-style: none;
+  padding-left: 10px;
+}
+.dashboard .savedSubs .panel .panel-settings .alert-methods li {
+  list-style-type: none;
+  margin: 10px 0;
+  font-size: 16px;
+}
+.dashboard .savedSubs .panel .panel-settings .confirm {
+  list-style: none;
+  padding-left: 0px;
+}
+.dashboard .savedSubs .panel .panel-settings .confirm li {
+  list-style-type: none;
+  margin: 10px 0;
+  font-size: 16px;
+}
+.dashboard .savedSubs .panel .panel-settings .confirm li button {
+  outline: 0;
+}
+body {
+  background-color: #CEE3F8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52' viewBox='0 0 52 52'%3E%3Cpath fill='%239C92AC' fill-opacity='0.12' d='M0 17.83V0h17.83a3 3 0 0 1-5.66 2H5.9A5 5 0 0 1 2 5.9v6.27a3 3 0 0 1-2 5.66zm0 18.34a3 3 0 0 1 2 5.66v6.27A5 5 0 0 1 5.9 52h6.27a3 3 0 0 1 5.66 0H0V36.17zM36.17 52a3 3 0 0 1 5.66 0h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 0 1 0-5.66V52H36.17zM0 31.93v-9.78a5 5 0 0 1 3.8.72l4.43-4.43a3 3 0 1 1 1.42 1.41L5.2 24.28a5 5 0 0 1 0 5.52l4.44 4.43a3 3 0 1 1-1.42 1.42L3.8 31.2a5 5 0 0 1-3.8.72zm52-14.1a3 3 0 0 1 0-5.66V5.9A5 5 0 0 1 48.1 2h-6.27a3 3 0 0 1-5.66-2H52v17.83zm0 14.1a4.97 4.97 0 0 1-1.72-.72l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1 0-5.52l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43c.53-.35 1.12-.6 1.72-.72v9.78zM22.15 0h9.78a5 5 0 0 1-.72 3.8l4.44 4.43a3 3 0 1 1-1.42 1.42L29.8 5.2a5 5 0 0 1-5.52 0l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1-.72-3.8zm0 52c.13-.6.37-1.19.72-1.72l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43a5 5 0 0 1 5.52 0l4.43-4.43a3 3 0 1 1 1.42 1.41l-4.44 4.43c.36.53.6 1.12.72 1.72h-9.78zm9.75-24a5 5 0 0 1-3.9 3.9v6.27a3 3 0 1 1-2 0V31.9a5 5 0 0 1-3.9-3.9h-6.27a3 3 0 1 1 0-2h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 1 1 2 0v6.27a5 5 0 0 1 3.9 3.9h6.27a3 3 0 1 1 0 2H31.9z'%3E%3C/path%3E%3C/svg%3E");
+}
+span.lb {
+  color: #CEE3F8 !important;
+}
+span.or {
+  color: orangered !important;
+}
+button.btn.btn-underline {
+  background-color: transparent;
+  border-color: transparent;
+  color: #404040;
+  text-decoration: underline;
+  font-size: 16px;
+  outline: 0;
+}
+header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+header .logo {
+  color: #232323;
+  text-decoration: none;
+  font-size: 50px;
+  text-shadow: 1px 1px 1px black;
+  margin: 10px;
+}
+header .menu {
+  float: right;
+}
+header .menu ul {
+  list-style: none;
+  display: none;
+}
+header .menu ul li {
+  list-style-type: none;
+}
+header .menu ul li button {
+  font-size: 30px;
+  margin: 20px;
+  border: 1px solid orangered;
+  background-color: transparent;
+  color: orangered;
+  padding: 9px 16px;
+  line-height: 1;
+  border-radius: 7px;
+  transition: linear 0.1s;
+}
+header .menu ul li button:hover {
+  background-color: orangered;
+  border-color: orangered;
+  color: white;
+  text-shadow: 1px 1px 1px #232323;
+}
+.landing {
+  display: none;
+}
+.landing h1 {
+  text-align: center;
+  color: #232323;
+  text-shadow: 1px 1px 1px black;
+}
+.landing h1 span {
+  color: orangered;
+}
+.landing h3 {
+  color: #232323;
   text-align: center;
 }
-form#signup .input-group,
-form#login .input-group {
+.landing #signup,
+.landing #login {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.33);
+  padding: 10px 50px;
+  border-radius: 10px;
+  width: 500px;
+  margin: 30px auto;
+  text-align: center;
+}
+.landing #signup h3,
+.landing #login h3 {
+  color: #ececec;
+  text-shadow: 1px 1px 1px black;
+  font-size: 40px;
+}
+.landing #signup h4,
+.landing #login h4 {
+  color: #ececec;
+  text-shadow: 1px 1px 1px black;
+  font-size: 30px;
+}
+.landing #signup .input-group,
+.landing #login .input-group {
   width: 100%;
   display: block;
 }
-form#signup .input-group input,
-form#login .input-group input {
+.landing #signup .input-group input,
+.landing #login .input-group input {
   display: block;
   width: 100%;
+  margin: 5px 0;
+  font-size: 20px;
+  height: auto;
+  line-height: 1;
+  border-radius: 4px;
+  float: none;
 }
-form#signup button[type="submit"],
-form#login button[type="submit"] {
-  margin: 10px auto;
+.landing #signup button[type="submit"],
+.landing #login button[type="submit"] {
+  background-color: orangered;
+  border-color: orangered;
+  margin: 10px;
 }

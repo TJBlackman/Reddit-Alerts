@@ -1,0 +1,117 @@
+// main: main.less
+
+.dashboard {
+    display: none;
+
+    form#addAlert {
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+        :after {
+            display: table;
+            content:"";
+            clear: both;
+        }
+
+        > div {
+            padding: 0 3px;
+        }
+        .input-group {
+            span {
+                padding-right: 5px;
+                font-size: 24px;
+            }
+            input[name="subreddit"] {
+                padding-left: 3px;
+            }
+        }
+        input {
+            height: 46px;
+            font-size: 24px;
+        }
+    }
+
+    .savedSubs {
+        margin-top: 20px;
+        .panel {
+            .panel-header {
+                font-size: 26px;
+                line-height: 1;
+                padding: 10px;
+                color: orangered;
+
+                span {
+                    cursor: pointer;
+                }
+            }
+            .panel-results {
+                display: none;
+
+                .table {
+                    margin-bottom: 5px;
+
+                    > tbody > tr:nth-last-child(1) > td {
+                        border-bottom: 1px solid #ddd;
+                    }
+                }
+                .settingsBtn {
+                    background-color: transparent;
+                    border: none;
+                    color: #337ab7;
+                    margin-right: 0;
+                    margin-left: auto;
+                    display: block;
+                    outline: 0;
+
+                    &:before {
+                        content: "\f0ad";
+                        font-family: FontAwesome;
+                        line-height: 1;
+                        margin: 0px 4px 0 0;
+                        font-size: 14px;
+                    }
+                }
+            }
+            .panel-settings {
+                padding: 10px;
+                display: none;
+
+                .settings-label {
+                    font-size: 14px;
+                    border-bottom: 1px solid grey;
+                }
+                textarea {
+                    display: block;
+                    height: 100px;
+                    width: 100%;
+                    resize: none;
+                }
+                .alert-methods {
+                    list-style: none;
+                    padding-left: 10px;
+
+                    li {
+                        list-style-type: none;
+                        margin: 10px 0;
+                        font-size: 16px;
+                    }
+                }
+                .confirm {
+                    list-style: none;
+                    padding-left: 0px;
+
+                    li {
+                        list-style-type: none;
+                        margin: 10px 0;
+                        font-size: 16px;
+
+                        button {
+                            outline: 0;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}

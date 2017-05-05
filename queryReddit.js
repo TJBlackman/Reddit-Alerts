@@ -42,7 +42,7 @@ module.exports = function(){
                     }
 
                     // else, save new reddit post!
-                    schemas.foundPosts.create(post)
+                    schemas.notifications.create(post)
                     .then(function(savedPost){
                         subreddit.matchedPosts.push(savedPost._id);
                         schemas.newSubreddit.findByIdAndUpdate(subreddit._id, {matchedPosts: subreddit.matchedPosts}, function(){

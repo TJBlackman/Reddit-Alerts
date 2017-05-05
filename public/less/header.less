@@ -1,0 +1,50 @@
+// main: ./main.less
+
+header {
+    &:after {
+        content:"";
+        display: table;
+        clear: both;
+    }
+    .logo {
+        color: #232323;
+        text-decoration: none;
+        font-size: 50px;
+        text-shadow: 1px 1px 1px black;
+        margin: 10px;
+    }
+
+    .menu {
+        float: right;
+
+        ul {
+            list-style: none;
+            display: none; // state control
+
+            li {
+                list-style-type: none;
+
+                button {
+                    font-size: 30px;
+                    margin: 20px;
+                    border: 1px solid orangered;
+                    background-color: transparent;
+                    color: orangered;
+                    padding: 9px 16px;
+                    line-height: 1;
+                    border-radius: 7px;
+                    transition: linear 0.1s;
+
+                    &:hover {
+                        background-color: orangered;
+                        border-color: orangered;
+                        color: white;
+                        text-shadow: 1px 1px 1px #232323;
+                    }
+                }
+            }
+        }
+
+        .signup {}
+    }
+}

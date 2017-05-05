@@ -12,11 +12,11 @@ var newRedditAlertSchema = new Schema({
     },
     matchedPosts: [{
         type: Schema.Types.ObjectId,
-        ref: 'matchedPost'
+        ref: 'notification'
     }]
 });
 
-var matchedPostSchema = new Schema({
+var redditNotificationSchema = new Schema({
     title: String,
     urlComments:String,
     url: String,
@@ -37,11 +37,11 @@ var userSchema = new Schema({
 });
 
 var newRedditAlert = mongoose.model('newRedditAlert',newRedditAlertSchema);
-var matchedPost = mongoose.model('matchedPost',matchedPostSchema);
+var notification = mongoose.model('notification',redditNotificationSchema);
 var User = mongoose.model('user',userSchema);
 
 module.exports = {
     'newSubreddit': newRedditAlert,
-    'foundPosts':matchedPost,
-    'user':User
+    'notifications': notification,
+    'user': User
 };
