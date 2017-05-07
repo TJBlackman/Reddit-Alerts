@@ -39,77 +39,148 @@
   height: 46px;
   font-size: 24px;
 }
-.dashboard .savedSubs {
-  margin-top: 20px;
+.dashboard .notification-row {
+  display: block;
+  margin: 25px 0;
+  border-radius: 5px;
+  background-color: white;
+  border-color: grey;
 }
-.dashboard .savedSubs .panel .panel-header {
-  font-size: 26px;
+.dashboard .notification-row .notification-header,
+.dashboard .notification-row .notification {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  min-height: 40px;
+  padding: 5px 0;
+}
+.dashboard .notification-row .notification-header > div,
+.dashboard .notification-row .notification > div {
+  float: left;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  font-size: 18px;
+}
+.dashboard .notification-row .notification-header > div.title,
+.dashboard .notification-row .notification > div.title {
+  width: 60%;
+  padding-right: 15px;
+}
+.dashboard .notification-row .notification-header > div.subreddit,
+.dashboard .notification-row .notification > div.subreddit {
+  width: 15%;
+}
+.dashboard .notification-row .notification-header > div.date,
+.dashboard .notification-row .notification > div.date {
+  width: 10%;
+}
+.dashboard .notification-row .notification-header > div.favorite,
+.dashboard .notification-row .notification > div.favorite {
+  width: 5%;
+  text-align: center;
+}
+.dashboard .notification-row .notification-header > div.favorite button,
+.dashboard .notification-row .notification > div.favorite button {
+  padding: 0;
   line-height: 1;
-  padding: 10px;
-  color: orangered;
-}
-.dashboard .savedSubs .panel .panel-header span {
-  cursor: pointer;
-}
-.dashboard .savedSubs .panel .panel-results {
-  display: none;
-}
-.dashboard .savedSubs .panel .panel-results .table {
-  margin-bottom: 5px;
-}
-.dashboard .savedSubs .panel .panel-results .table > tbody > tr:nth-last-child(1) > td {
-  border-bottom: 1px solid #ddd;
-}
-.dashboard .savedSubs .panel .panel-results .settingsBtn {
-  background-color: transparent;
   border: none;
-  color: #337ab7;
-  margin-right: 0;
-  margin-left: auto;
-  display: block;
+  background: transparent;
+  color: #5CB85C;
+  font-size: 30px;
   outline: 0;
+  transition: linear 0.1s;
 }
-.dashboard .savedSubs .panel .panel-results .settingsBtn:before {
-  content: "\f0ad";
-  font-family: FontAwesome;
-  line-height: 1;
-  margin: 0px 4px 0 0;
-  font-size: 14px;
+.dashboard .notification-row .notification-header > div.favorite button:hover,
+.dashboard .notification-row .notification > div.favorite button:hover {
+  color: #398439;
 }
-.dashboard .savedSubs .panel .panel-settings {
-  padding: 10px;
+.dashboard .notification-row .notification-header > div.details,
+.dashboard .notification-row .notification > div.details {
+  width: 10%;
+  float: right;
+  text-align: right;
+}
+.dashboard .notification-row .notification-header:after,
+.dashboard .notification-row .notification:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.dashboard .notification-row .notification-header {
+  border-top: none !important;
+}
+.dashboard .notification-row .notification-header > div {
+  font-weight: bold;
+}
+.dashboard .notification-row .notification .notification-details {
   display: none;
-}
-.dashboard .savedSubs .panel .panel-settings .settings-label {
-  font-size: 14px;
-  border-bottom: 1px solid grey;
-}
-.dashboard .savedSubs .panel .panel-settings textarea {
-  display: block;
-  height: 100px;
+  min-height: 0;
   width: 100%;
-  resize: none;
+  height: auto;
+  margin-top: 10px;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.05), inset -2px -2px 4px rgba(0, 0, 0, 0.05);
 }
-.dashboard .savedSubs .panel .panel-settings .alert-methods {
-  list-style: none;
-  padding-left: 10px;
+.dashboard .notification-row .notification .notification-details .full-details {
+  float: left;
+  width: 75%;
+  padding: 0 15px;
 }
-.dashboard .savedSubs .panel .panel-settings .alert-methods li {
+.dashboard .notification-row .notification .notification-details .full-details ul {
   list-style-type: none;
-  margin: 10px 0;
-  font-size: 16px;
+  padding: 5px 0 0 5px;
 }
-.dashboard .savedSubs .panel .panel-settings .confirm {
+.dashboard .notification-row .notification .notification-details .full-details ul li {
+  line-height: 1.2;
+  font-size: 16px;
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 8px 0 0 0;
+}
+.dashboard .notification-row .notification .notification-details .full-details ul li:nth-last-child(1) {
+  border-bottom: none;
+}
+.dashboard .notification-row .notification .notification-details .full-details ul li label {
+  float: left;
+  width: 30%;
+}
+.dashboard .notification-row .notification .notification-details .full-details ul li span {
+  float: left;
+  width: 70%;
+}
+.dashboard .notification-row .notification .notification-details .full-details ul li input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+}
+.dashboard .notification-row .notification .notification-details .full-details ul li:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.dashboard .notification-row .notification .notification-details .action-buttons {
+  float: left;
+  width: 25%;
+  padding-top: 13px;
+}
+.dashboard .notification-row .notification .notification-details .action-buttons ul {
+  padding: 0;
   list-style: none;
-  padding-left: 0px;
 }
-.dashboard .savedSubs .panel .panel-settings .confirm li {
+.dashboard .notification-row .notification .notification-details .action-buttons ul li {
   list-style-type: none;
-  margin: 10px 0;
-  font-size: 16px;
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 3px;
 }
-.dashboard .savedSubs .panel .panel-settings .confirm li button {
-  outline: 0;
+.dashboard .notification-row .notification .notification-details .action-buttons ul li button {
+  width: 50%;
+}
+.dashboard .notification-row .notification .notification-details:after {
+  content: "";
+  display: block;
+  clear: both;
 }
 body {
   background-color: #CEE3F8;

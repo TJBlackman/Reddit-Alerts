@@ -104,64 +104,22 @@
                 </form>
             </div>
 
-            <div class="row savedSubs">
-                <div class="panel">
-                    <div class="panel-header"><span>/leagueoflegends</span></div>
-                    <div class="panel-results">
-                        <table class="table">
-                            <tr>
-                                <td><a href="#">For the first time since his release, Jhin finally has a sub-50% winrate, sitting at a 45%.</a></td>
-                                <td>4/11/2017</td>
-                                <td>Delete</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">FlyQuest Ownership has a lot of Questions to Answer.</a></td>
-                                <td>4/11/2017</td>
-                                <td>Delete</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">Riot teasing something about Annie?</td>
-                                <td>4/11/2017</a></td>
-                                <td>Delete</td>
-                            </tr>
-                        </table>
-                        <button type="button" class="settingsBtn">Settings for /r/leagueoflegends</button>
-                    </div>
-                    <div class="panel-settings">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <p class="settings-label">Key Words and Phrases</p>
-                                <textarea></textarea>
-                            </div>
-                            <div class="col-sm-4">
-                                <p class="settings-label">Notification Methods</p>
-                                <ul class="alert-methods">
-                                    <li>
-                                        <input type="checkbox" name="text" /> Text
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="Twitter" /> Twitter
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="email" /> Email
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-4">
-                                <p class="settings-label">Save your settings</p>
-                                <ul class="confirm">
-                                    <li>
-                                        <button type="button" class="save btn btn-success">Save &amp; Close</button>
-                                    </li>
-                                    <li>
-                                        <button type="button" class="delete btn btn-danger">Delete Subreddit</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+            <div class="row filtersRow">
+                <div class="col-md-6">
+                    <form id="search-notifications">
+                        <input type="text" placeholder="search" />
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
 
-
-
+            <div class="row notification-row">
+                <div class="col-xs-12">
+                    <div class="notification-header">
+                        <div class="title">Title</div>
+                        <div class="subreddit">Subreddit</div>
+                        <div class="date">Date</div>
+                        <div class="favorite">Flag</div>
                     </div>
                 </div>
             </div>

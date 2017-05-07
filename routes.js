@@ -90,7 +90,7 @@ var userData = function(req, res, next){
     (!req.session.u) ? res.send('Unauthorized') : res.send(req.session[req.body.data]);
 }
 
-var populateDashboard = function(req, res, next){
+var getNotifications = function(req, res, next){
     if (!req.session.u) {res.send('Unauthorized'); return false; }
 
     schemas.notifications.find({'createdBy':req.session.u}, function(er, list){
@@ -102,7 +102,7 @@ var populateDashboard = function(req, res, next){
 module.exports = function(app){
     app.get('/', homepage);
     app.get('/checklogin', checkLogin);
-    app.get('/populateDashboard', populateDashboard)
+    app.get('/getNotifications', getNotifications)
     app.post('/createalert', createAlert);
     app.post('/newuser', newUser);
     app.post('/login', login);

@@ -58,7 +58,7 @@ $(function(){
                 subreddit: subredditValue,
                 keyWords: parseKeywords(keyWordsValue),
                 contactMethod: contactType
-            }
+            };
 
             // check for valid subreddit
             $.ajax({
@@ -100,7 +100,7 @@ $(function(){
             required = [username, password, pConfirm],
             userData = {};
 
-        form.find('button[type="submit"]').on('click', validateAndSubmit)
+        form.find('button[type="submit"]').on('click', validateAndSubmit);
 
         function validateAndSubmit(e){
             e.preventDefault();
@@ -122,7 +122,7 @@ $(function(){
                 phone: valToLowerCase(phone),
                 email: email.val().trim(),
                 twitter: twitter.val().trim()
-            }
+            };
 
             $.ajax({
                 method: 'POST',
@@ -130,10 +130,15 @@ $(function(){
                 data: JSON.stringify(userData),
                 contentType: 'application/json',
                 success: function(data){
-                    data === 'success' ? goToDashboard() : alert(data);
+                    if (data === 'success') {
+                        RA.state('dashboard');
+                        firstTimeUser();
+                    } else {
+                        alert(data);
+                    }
                 }
             });
-        };
+        }
     }()); // END signup form
 
     // ==== LOGIN FORM =====
@@ -154,7 +159,7 @@ $(function(){
             user = {
                 username: valToLowerCase(username),
                 password: password.val().trim()
-            }
+            };
 
             $.ajax({
                 method: 'POST',
@@ -168,11 +173,7 @@ $(function(){
         function handleResponse(str){
             if (str === 'success') {
                 RA.state('dashboard');
-                $.ajax({
-                    method: 'GET',
-                    url: '/populateDashboard',
-                    success: function(data){ console.log(data); }
-                });
+                getNotifications();
             } else {
                 alert(str);
             }
@@ -182,37 +183,24 @@ $(function(){
     // ==== DASHBOARD =====
     // ====================
     (function(){
-        var dashboard = $('.dashboard');
+        var notificationRow = $('.dashboard .notification-row'),
+            duration        = 250;
 
-        dashboard.on('click','.panel-header',showPanelResults);
-        dashboard.on('click','.settingsBtn',showPanelSettings);
+        notificationRow.on('click','[data-action="details"]', toggleDetails)
 
-        // show and hide results panel
-        function showPanelResults(event){
-            var results  = $(this).siblings('.panel-results'),
-                settings = $(this).siblings('.panel-settings');
-            if (results.is(':visible') && settings.is(':visible')){
-                settings.slideUp({
-                    duration: 125,
-                    easing: 'linear',
-                    complete: function(){
-                        results.slideUp({
-                            duration: 125,
-                            easing: 'linear'
-                        });
-                    }
-                });
-            } else if (results.is(':visible')) {
-                results.slideUp(250);
-            } else {
-                results.slideDown(250);
+        function toggleDetails(e){
+            var row = $(this).closest('.notification'),
+                detailsPanel = row.find('.notification-details');
+            if (detailsPanel.is(':visible')){
+                detailsPanel.slideUp(duration);
+            }  else {
+                notificationRow.find('.notification-details:visible').slideUp(duration)
+                detailsPanel.slideDown(duration);
             }
         }
-        function showPanelSettings(event){
-            var settings = $(this).closest('.panel').find('.panel-settings');
-            settings.is(':visible') ? settings.slideUp(250) : settings.slideDown(250);
-        }
-    }())
+    }());
+
+    //
 
 
     // ==== GLOBAL FUNCTIONS - to this file at least =====
@@ -230,16 +218,99 @@ $(function(){
         }
         return failTest;
     }
+    function firstTimeUser(){
+        alert('TODO: Show some instructions on how to use this service!');
+    }
+    function getNotifications(){
+        $.ajax({
+            method: 'GET',
+            url: '/getNotifications',
+            success: (data) => {
+                data.length > 0 ? renderNotifications(data) : firstTimeUser();
+            }
+        });
+    }
+    function renderNotifications(array){
+        var array           = array.sort((a, b) => a.subreddit.localeCompare(b.subreddit)),
+            i               = 0,
+            iMax            = array.length,
+            notificationRow = $('.dashboard .notification-row > div'),
+            notifications   = notificationRow.find('.notification');
+        notifications.remove();
+        for (;i < iMax; ++i){
+            var rowHTML = getNotificationHTML(array[i]);
+            notificationRow.append(rowHTML)
+        }
+    }
+    function getNotificationHTML(obj){
+        return `
+        <div class="notification" data-rel="${obj._id}">
+            <div class="title">
+                <a href="${obj.url}" target="_blank">${obj.title}</a>
+            </div>
+            <div class="subreddit">
+                <a href="//www.reddit.com/r/${obj.subreddit}" target="_blank">/${obj.subreddit}</a>
+            </div>
+            <div class="date">${new Date(obj.dateFound).toLocaleDateString()}</div>
+            <div class="favorite">
+                <button type="button">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="details">
+                <button type="button" class="btn btn-default" data-action="details">Details</button>
+            </div>
+            <div class="notification-details well">
+                <div class="full-details">
+                    <ul>
+                        <li>
+                            <label>Title:</label>
+                            <span>${obj.title}</span>
+                        </li>
+                        <li>
+                            <label>URL:</label>
+                            <span><input type="text" readonly value="${obj.url}"></span>
+                        </li>
+                        <li>
+                            <label>Author:</label>
+                            <span>
+                                <a href="https://www.reddit.com/user/${obj.author}/submitted" target="_blank">${obj.author}</a>
+                            </span>
+                        </li>
+                        <li>
+                            <label>Matched Terms:</label>
+                            <span>${obj.matchedOn}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="action-buttons">
+                    <ul>
+                        <li>
+                            <button type="button" class="btn btn-success">Favorite</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-info">Copy Link</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-warning">Archive</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>`;
+    }
 
-    var body = $('body');
     // change state of application, if state exists
     var changeState = function(state){
-        body.attr('data-state', state);
-    }
+        $(document.body).attr('data-state', state);
+    };
 
     // global object
     return RA = {
         state: changeState
-    }
+    };
 
 });

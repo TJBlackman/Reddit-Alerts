@@ -26,8 +26,10 @@ module.exports = function(){
                                 postComments: post.data.permalink,
                                 url: post.data.url,
                                 author: post.data.author,
-                                matchedOn:keyWords[i],
-                                createdBy:subreddit.createdBy
+                                matchedOn: keyWords[i],
+                                createdBy: subreddit.createdBy,
+                                subreddit: subreddit.sub,
+                                dateFound: new Date().getTime()
                             });
                             break;
                         }

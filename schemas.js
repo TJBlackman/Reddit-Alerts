@@ -22,6 +22,8 @@ var redditNotificationSchema = new Schema({
     url: String,
     author: String,
     matchedOn:String,
+    subreddit:String,
+    dateFound: Number,
     createdBy: {
         type: String,
         required: true

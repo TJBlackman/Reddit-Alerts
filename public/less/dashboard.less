@@ -31,86 +31,155 @@
         }
     }
 
-    .savedSubs {
-        margin-top: 20px;
-        .panel {
-            .panel-header {
-                font-size: 26px;
-                line-height: 1;
-                padding: 10px;
-                color: orangered;
+    .notification-row {
+        display: block;
+        margin: 25px 0;
+        border-radius: 5px;
+        background-color: white;
+        border-color: grey;
 
-                span {
-                    cursor: pointer;
+        .notification-header,
+        .notification {
+            border-top: 1px solid rgba(0,0,0,0.1);
+            min-height: 40px;
+            padding: 5px 0;
+
+            > div {
+                float: left;
+                display: inline-block;
+                margin: 0;
+                padding: 0;
+                vertical-align: middle;
+                font-size: 18px;
+
+                &.title {
+                    width: 60%;
+                    padding-right: 15px;
                 }
-            }
-            .panel-results {
-                display: none;
-
-                .table {
-                    margin-bottom: 5px;
-
-                    > tbody > tr:nth-last-child(1) > td {
-                        border-bottom: 1px solid #ddd;
-                    }
+                &.subreddit {
+                    width: 15%;
                 }
-                .settingsBtn {
-                    background-color: transparent;
-                    border: none;
-                    color: #337ab7;
-                    margin-right: 0;
-                    margin-left: auto;
-                    display: block;
-                    outline: 0;
+                &.date {
+                    width: 10%;
+                }
+                &.favorite {
+                    width: 5%;
+                    text-align: center;
 
-                    &:before {
-                        content: "\f0ad";
-                        font-family: FontAwesome;
+                    button {
+                        padding: 0;
                         line-height: 1;
-                        margin: 0px 4px 0 0;
-                        font-size: 14px;
-                    }
-                }
-            }
-            .panel-settings {
-                padding: 10px;
-                display: none;
+                        border: none;
+                        background: transparent;
+                        color: #5CB85C;
+                        font-size: 30px;
+                        outline: 0;
+                        transition: linear 0.1s;
 
-                .settings-label {
-                    font-size: 14px;
-                    border-bottom: 1px solid grey;
-                }
-                textarea {
-                    display: block;
-                    height: 100px;
-                    width: 100%;
-                    resize: none;
-                }
-                .alert-methods {
-                    list-style: none;
-                    padding-left: 10px;
-
-                    li {
-                        list-style-type: none;
-                        margin: 10px 0;
-                        font-size: 16px;
-                    }
-                }
-                .confirm {
-                    list-style: none;
-                    padding-left: 0px;
-
-                    li {
-                        list-style-type: none;
-                        margin: 10px 0;
-                        font-size: 16px;
-
-                        button {
-                            outline: 0;
+                        &:hover {
+                            color: #398439;
                         }
                     }
                 }
+                &.details {
+                    width: 10%;
+                    float: right;
+                    text-align: right;
+                }
+            }
 
+            &:after {
+                content: "";
+                display: block;
+                clear: both;
+            }
+        }
+
+        .notification-header {
+            border-top: none !important;
+            > div {
+                font-weight: bold;
+            }
+        }
+
+        .notification {
+            .notification-details {
+                display: none;
+                min-height: 0;
+                width: 100%;
+                height: auto;
+                margin-top: 10px;
+                box-shadow: inset 2px 2px 4px rgba(0,0,0,0.05),
+                            inset -2px -2px 4px rgba(0,0,0,0.05);
+
+                .full-details {
+                    float: left;
+                    width: 75%;
+                    padding: 0 15px;
+
+                    ul {
+                        list-style-type: none;
+                        padding: 5px 0 0 5px;
+
+                        li {
+                            line-height: 1.2;
+                            font-size: 16px;
+                            display: block;
+                            border-bottom: 1px solid rgba(0,0,0,0.1);
+                            padding: 8px 0 0 0;
+
+                            &:nth-last-child(1) { border-bottom: none; }
+
+                            label {
+                                float: left;
+                                width: 30%;
+                            }
+                            span {
+                                float: left;
+                                width: 70%;
+                            }
+                            input {
+                                height: 100%;
+                                width: 100%;
+                                border: none;
+                                background-color: transparent;
+                            }
+                            &:after {
+                                content: "";
+                                display: block;
+                                clear: both;
+                            }
+
+                        }
+                    }
+                }
+                .action-buttons {
+                    float: left;
+                    width: 25%;
+                    padding-top: 13px;
+
+                    ul {
+                        padding: 0;
+                        list-style: none;
+
+                        li {
+                            list-style-type: none;
+                            display: block;
+                            width: 100%;
+                            text-align: center;
+                            padding: 3px;
+
+                            button {
+                                width: 50%;
+                            }
+                        }
+                    }
+                }
+                &:after{
+                    content: "";
+                    display: block;
+                    clear: both;
+                }
             }
         }
     }
