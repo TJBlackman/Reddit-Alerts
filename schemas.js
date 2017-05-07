@@ -24,6 +24,8 @@ var redditNotificationSchema = new Schema({
     matchedOn:String,
     subreddit:String,
     dateFound: Number,
+    bookmark: Boolean,
+    archive: Boolean, 
     createdBy: {
         type: String,
         required: true

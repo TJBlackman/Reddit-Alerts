@@ -98,6 +98,21 @@ var getNotifications = function(req, res, next){
     });
 }
 
+var updateNotification = function(req, res, next){
+    if (!req.session.u) { res.send('Unauthorized'); return false; }
+
+    schemas.notifications.findByIdAndUpdate(req.body._id, req.body, function (error, updatedItem){
+        if (error) { res.send(error); } else { res.send('Notification updated!'); }
+    });
+}
+var deleteNotification = function(req, res, next){
+    if (!req.session.u) { res.send('Unauthorized'); return false; }
+
+    schemas.notifications.findByIdAndRemove(req.body.id, function(err, success){
+        if (err) { res.send(error); } else { res.send('Notification deleted!'); }
+    })
+}
+
 
 module.exports = function(app){
     app.get('/', homepage);
@@ -106,5 +121,7 @@ module.exports = function(app){
     app.post('/createalert', createAlert);
     app.post('/newuser', newUser);
     app.post('/login', login);
-    app.post('/getUserData', userData)
+    app.post('/getUserData', userData);
+    app.put('/updateNotification', updateNotification)
+    app.delete('/deleteNotification', deleteNotification)
 }

@@ -10,7 +10,6 @@ $(function(){
             contactBtn     = form.find('button[name="contact-method"]'),
             contactOptions = contactBtn.next('ul.dropdown-menu'),
             submitBtn      = form.find('button[type="submit"]'),
-            validSubreddit = false,
             subreddits     = ['askreddit','science','technology','explainlikeimfive','leagueoflegends','psbattle'];
 
 
@@ -100,7 +99,7 @@ $(function(){
             required = [username, password, pConfirm],
             userData = {};
 
-        form.find('button[type="submit"]').on('click', validateAndSubmit);
+        submit.on('click', validateAndSubmit);
 
         function validateAndSubmit(e){
             e.preventDefault();
@@ -183,28 +182,123 @@ $(function(){
     // ==== DASHBOARD =====
     // ====================
     (function(){
-        var notificationRow = $('.dashboard .notification-row'),
-            duration        = 250;
+        var notificationRow = $('.dashboard .notification-row');
+        notificationRow.on('click','[data-action]', getActions);
 
-        notificationRow.on('click','[data-action="details"]', toggleDetails)
+        function getActions(e){
+            var btn = $(this),
+                action = btn.attr('data-action'),
+                id = btn.closest('.notification').attr('data-rel');
+            switch (action) {
+                case 'details': toggleDetails(btn, id); break;
+                case 'bookmark': bookmarkNotification(btn, id); break;
+                case 'copy-link': copyLinkToClipboard(btn, id); break;
+                case 'archive': archiveNotification(btn, id); break;
+                case 'delete': deleteNotification(btn, id); break;
+                default: console.warn('No action determined for:', action);
+            }
+        }
 
-        function toggleDetails(e){
-            var row = $(this).closest('.notification'),
-                detailsPanel = row.find('.notification-details');
+        function toggleDetails(btn, id){
+            var row = btn.closest('.notification'),
+                detailsPanel = row.find('.notification-details'),
+                duration = 250;
             if (detailsPanel.is(':visible')){
                 detailsPanel.slideUp(duration);
             }  else {
-                notificationRow.find('.notification-details:visible').slideUp(duration)
+                notificationRow.find('.notification-details:visible').slideUp(duration);
                 detailsPanel.slideDown(duration);
             }
         }
+
+        function bookmarkNotification(btn, id) {
+            var row       = btn.closest('.notification'),
+                icon      = row.find('.favorite button .fa'),
+                actionBtn = row.find('.action-buttons [data-action="bookmark"]'),
+                key       = 'bookmark',
+                value     = null;
+
+            icon.toggleClass('fa-bookmark-o');
+            icon.toggleClass('fa-bookmark');
+
+            if (actionBtn.text() === 'Bookmark'){
+                actionBtn.text('Un-bookmark');
+                value = true;
+            } else {
+                actionBtn.text('Bookmark');
+                value = false;
+            }
+
+            updateNotificationAttribute(id, key, value);
+        }
+
+        function copyLinkToClipboard(btn, id){
+            var input = btn.closest('.notification-details.well').find('.full-details input[readonly]'),
+                status = false;
+
+            input.select();
+            status = document.execCommand('copy');
+            input.blur();
+
+            if (status){
+                btn.text('Copied!');
+                setTimeout(() => btn.text('Copy Link'), 1500);
+            } else {
+                window.prompt("Unable to copy automatically. \nTo copy, press Ctrl + C, then enter. ", input.val());
+            }
+        }
+
+        function archiveNotification(btn, id){
+            var row = btn.closest('.notification'),
+                value = null;
+
+            if (btn.text() === 'Archive'){
+                btn.text('Un-archive');
+                value = true;
+                row.fadeOut(750, () => row.remove());
+            } else {
+                btn.text('Archive');
+                value = false;
+            }
+
+            updateNotificationAttribute(id, 'archive', value);
+        }
+
+        function deleteNotification(btn, id){
+            var row = btn.closest('.notification'),
+                index = RA.notifications.findIndex((obj) => obj._id === id);
+            row.fadeOut(750, () => row.remove());
+            RA.notifications.splice(index, 1);
+            $.ajax({
+                method:'DELETE',
+                url: '/deleteNotification',
+                contentType: 'application/json',
+                data: JSON.stringify({'id': id}),
+                error: function(err) { console.log(err); },
+                success: function(data) { console.log(data); }
+            });
+        }
     }());
 
-    //
+// =====
 
+    function unauthorized(){
+        alert('Session Timeout: You must re-login to perform this action.');
+        RA.state('login');
+    }
 
-    // ==== GLOBAL FUNCTIONS - to this file at least =====
-    // ===================================================
+    function updateNotificationAttribute(id, key, value){
+        var notification = RA.notifications.find((obj) => obj._id === id);
+        notification[key] = value;
+        $.ajax({
+            method: 'PUT',
+            url: '/updateNotification',
+            contentType: 'application/json',
+            data: JSON.stringify(notification),
+            error: function(error){ console.log(error); },
+            success: function(data){ console.log(data); }
+        });
+    }
 
     function valToLowerCase(el){ return el.val().trim().toLowerCase(); }
 
@@ -226,6 +320,7 @@ $(function(){
             method: 'GET',
             url: '/getNotifications',
             success: (data) => {
+                RA.notifications = data;
                 data.length > 0 ? renderNotifications(data) : firstTimeUser();
             }
         });
@@ -239,10 +334,14 @@ $(function(){
         notifications.remove();
         for (;i < iMax; ++i){
             var rowHTML = getNotificationHTML(array[i]);
-            notificationRow.append(rowHTML)
+            notificationRow.append(rowHTML);
         }
     }
     function getNotificationHTML(obj){
+        var bookmarkClass = obj.bookmark ? 'fa-bookmark' : 'fa-bookmark-o',
+            bookmarkText = obj.bookmark ? 'Un-bookmark' : 'Bookmark',
+            archiveText = obj.archive ? 'Un-archive' : 'Archive';
+
         return `
         <div class="notification" data-rel="${obj._id}">
             <div class="title">
@@ -253,8 +352,8 @@ $(function(){
             </div>
             <div class="date">${new Date(obj.dateFound).toLocaleDateString()}</div>
             <div class="favorite">
-                <button type="button">
-                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                <button type="button" data-action="bookmark">
+                    <i class="fa ${bookmarkClass} aria-hidden="true"></i>
                 </button>
             </div>
             <div class="details">
@@ -286,16 +385,16 @@ $(function(){
                 <div class="action-buttons">
                     <ul>
                         <li>
-                            <button type="button" class="btn btn-success">Favorite</button>
+                            <button type="button" class="btn btn-success" data-action="bookmark">${bookmarkText}</button>
                         </li>
                         <li>
-                            <button type="button" class="btn btn-info">Copy Link</button>
+                            <button type="button" class="btn btn-info" data-action="copy-link">Copy Link</button>
                         </li>
                         <li>
-                            <button type="button" class="btn btn-warning">Archive</button>
+                            <button type="button" class="btn btn-warning" data-action="archive">${archiveText}</button>
                         </li>
                         <li>
-                            <button type="button" class="btn btn-danger">Delete</button>
+                            <button type="button" class="btn btn-danger" data-action="delete">Delete</button>
                         </li>
                     </ul>
                 </div>

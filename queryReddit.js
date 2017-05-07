@@ -29,7 +29,9 @@ module.exports = function(){
                                 matchedOn: keyWords[i],
                                 createdBy: subreddit.createdBy,
                                 subreddit: subreddit.sub,
-                                dateFound: new Date().getTime()
+                                dateFound: new Date().getTime(),
+                                bookmark: false,
+                                archive: false
                             });
                             break;
                         }
