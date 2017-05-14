@@ -31,7 +31,8 @@ module.exports = function(){
                                 subreddit: subreddit.sub,
                                 dateFound: new Date().getTime(),
                                 bookmark: false,
-                                archive: false
+                                archive: false,
+                                new: true
                             });
                             break;
                         }
@@ -41,7 +42,6 @@ module.exports = function(){
                 posts.forEach(function(post){
                     // see if exact matching url already exists, don't record duplicate
                     if (JSON.stringify(subreddit.matchedPosts).includes(post.url)) {
-                        console.log('DUPLICATE, '+subreddit.createdBy+', '+post.url);
                         return false;
                     }
 
@@ -50,7 +50,7 @@ module.exports = function(){
                     .then(function(savedPost){
                         subreddit.matchedPosts.push(savedPost._id);
                         schemas.newSubreddit.findByIdAndUpdate(subreddit._id, {matchedPosts: subreddit.matchedPosts}, function(){
-                            console.log('NEW POST, '+subreddit.createdBy+', '+post.url);
+                            // console.log('NEW POST, '+subreddit.createdBy+', '+post.url);
                         });
                     }).catch(error)
                 });

@@ -83,10 +83,9 @@
 
         </div> <!-- end landing -->
 
-        <!-- =======     CREATE NEW ALERTS    ======= -->
+        <!-- =======     DASHBOARD            ======= -->
         <!-- ======================================== -->
         <div class="dashboard">
-
             <div class="row">
                 <form id="addAlert">
                     <div class="col-sm-5">
@@ -105,11 +104,58 @@
             </div>
 
             <div class="row filtersRow">
-                <div class="col-md-6">
-                    <form id="search-notifications">
-                        <input type="text" placeholder="search" />
-                        <button type="submit">Search</button>
-                    </form>
+                <div class="col-xs-12">
+                    <div class="input-group search-group">
+                        <input type="text" class="form-control" placeholder="Search for..." name="search-field">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="searchBtn">Go!</button>
+                        </span>
+                    </div>
+                    <div class="filter-options">
+                        <div class="btn-group filter-dropdown" data-name="subreddit">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" name="subreddit-dropdown" data-selected="" data-name="Subreddit">
+                                Subreddit
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-role="filter-select" data-value="">Clear Filter</a></li>
+                                <li class="divider"></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group filter-dropdown" data-name="author">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" name="author-dropdown" data-selected="" data-name="Authors">
+                                Authors
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-role="filter-select" data-value="">Clear Filter</a></li>
+                                <li class="divider"></li>
+                            </ul>
+                        </div>
+                        <div class="date-picker">
+                            <input type="text" class="form-control" placeholder="Date range" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 check-options">
+                    <!-- Bookmarked | Visited | Archived | All -->
+
+                    <span>Show only:</span>
+                    <label>
+                        <input type="checkbox" name="new-toggle"/>
+                        <span data-text="New">New</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="visited-toggle"/>
+                        <span data-text="Visited">Visited</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="bookmark-toggle"/>
+                        <span data-text="Bookmarked">Bookmarked</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="archive-toggle"/>
+                        <span data-text="Archived">Archived</span>
+                    </label>
+                    <button type="button" name="clearFilters" class="btn btn-default pull-right">Reset Filters</button>
                 </div>
             </div>
 
@@ -131,7 +177,6 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!-- -->
-        <script src="./js/ux.js"></script>
         <script src="./js/index.js"></script>
 
     </body>

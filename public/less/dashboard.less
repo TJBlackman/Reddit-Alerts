@@ -31,6 +31,113 @@
         }
     }
 
+    .filtersRow {
+        background-color: white;
+        margin: 10px 0;
+        padding: 5px 0 10px;
+        border-radius: 5px;
+
+        > div {
+            margin: 5px 0;
+        }
+
+        // clear floats
+        &:after { content: ""; display: block; clear: both; }
+
+        .search-group {
+            width: 50%;
+            float: left;
+            padding: 0 10px 0 0;
+        }
+
+        .filter-options{
+            display: block;
+            width: 50%;
+            float: left;
+
+            > div {
+                display: inline-block;
+                width: 32%;
+                vertical-align: top;
+
+                &:nth-child(2) { margin: 0 1%; }
+            }
+            .btn-group {
+                button {
+                    width: 100%;
+                    text-align: left;
+                    position: relative;
+
+                    &:after {
+                        content:"\f0d7";
+                        font-family: FontAwesome;
+                        position: absolute;
+                        top: 6px;
+                        right: 7px;
+                    }
+                }
+            }
+            .date-picker {
+                input {
+                    width: 100%;
+                }
+            }
+        }
+
+        .check-options {
+            height: 30px;
+            line-height: 30px;
+            vertical-align: middle;
+
+            button[name="clearFilters"] {
+                margin-right: 3px;
+            }
+            > span { font-weight: bold; }
+            span {
+                line-height: 30px;
+                vertical-align: top;
+                font-weight: normal;
+                font-size: 16px;
+            }
+            label {
+                margin: 0 0 0 20px;
+                border-radius: 5px;
+                position: relative;
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+                span {
+                    padding: 0 10px;
+                    display: block;
+                    height: 100%;
+                    width: 100%;
+                    border-radius: 5px;
+                    border: 1px solid grey;
+                    color: grey;
+                    text-align: center;
+                    box-shadow: 0 0 3px #6b6b6b;
+                    transition: .15s ease-out;
+                    user-select: none;
+                }
+
+                input {
+                    display: none;
+                }
+
+                .selected,
+                input:checked + span {
+                    color: green;
+                    border-color: green;
+                    box-shadow: 0 0 2px transparent, inset 0 0 2px #6b6b6b;
+                }
+            }
+
+        }
+
+    }
+
     .notification-row {
         display: block;
         margin: 25px 0;
