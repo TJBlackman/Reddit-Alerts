@@ -19,3 +19,24 @@
     header .menu .dashboard,
     .dashboard { display: block; }
 }
+
+// ==== Settings
+#state[data-state="settings"] {
+    .settings { display: block; }
+}
+
+// ==== Menu
+#state[data-state="dashboard"],
+#state[data-state="settings"] {
+    header .menu ul {
+        display: block;
+
+        li {
+            display: none;
+
+            &.authenticated {
+                display: inline-block;
+            }
+        }
+    }
+}

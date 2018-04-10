@@ -48,3 +48,34 @@ header {
         .signup {}
     }
 }
+
+#state[data-state="dashboard"],
+#state[data-state="settings"] {
+    .menu {
+        ul {
+            padding: 0;
+            margin: 25px 0 0 0;
+
+            li {
+                display: none;
+                &.authenticated {
+                    display: inline-block;
+
+                    button {
+                        border: 1px solid transparent;
+                        font-size: 18px;
+                        margin: 0;
+                        transition: linear 0.15s;
+
+                        &:hover {
+                            background-color: transparent;
+                            border: 1px solid orangered;
+                            color: orangered;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

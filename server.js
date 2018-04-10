@@ -18,7 +18,8 @@ const express    = require('express')
 mongoose.Promise = global.Promise;
 
 // connect to DB
-mongoose.connect('mongodb://localhost/redditAlerts');
+mongoose.connect(config.MONGO_URI, config.MONGO_OPTIONS);
+
 
 // set up static folder
 app.use(express.static(path.join(__dirname,"./public")));
@@ -31,15 +32,12 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: minute * 300, secure: false }
 }));
-// == use to view session data on all requests
-// app.use(function(req, res, next){
-//     console.log(req.session);
-//     next();
-// });
+
 
 routes(app);
+setInterval(queryReddit, 60000)
 
 // app is listening!
-app.listen(8080, function(){
-    console.log('Server Live: 8080');
+app.listen(config.PORT, function(){
+    console.log('Server Live: '+config.PORT);
 })

@@ -33,6 +33,13 @@ $(function(){
         state: changeState
     };
 
+    // state-change buttons
+    $('[data-cs]').click(function(e){
+        e.preventDefault();
+        var state = $(this).attr('data-cs');
+        RA.state(state);
+    });
+
     // === ADD NEW REDDIT ALERT FORM ====
     // =========================================================================================================
     // =========================================================================================================
@@ -54,7 +61,7 @@ $(function(){
             var i = 1;
             inputSubreddit.attr('placeholder',subreddits[0]);
             setInterval(function(){
-                (i === subreddits.length - 1)   ?   (i = 0)   :   (++i);
+                (i === subreddits.length - 1) ? (i = 0) : (++i);
                 inputSubreddit.attr('placeholder',subreddits[i]);
             }, 2000);
         }());
@@ -171,6 +178,7 @@ $(function(){
                     if (data === 'success') {
                         RA.state('dashboard');
                         firstTimeUser();
+                        form.find('input').val('');
                     } else {
                         alert(data);
                     }
@@ -215,6 +223,7 @@ $(function(){
             if (str === 'success') {
                 RA.state('dashboard');
                 RA.getNotifications();
+                form.find('input').val('');
             } else {
                 alert(str);
             }
@@ -246,7 +255,7 @@ $(function(){
             var row = $(e.target).closest('.notification'),
                 id = row.attr('data-rel');
             row.removeClass('new').addClass('visited');
-            updateNotificationAttribute(id, 'new', 'false');
+            updateNotificationAttribute(id, 'new', false);
         }
 
         function getActions(e){
@@ -386,20 +395,24 @@ $(function(){
             // include from check boxes, only if 1 or more are checked
             if ( params.bookmark || params.archive || params.new || params.visited ) {
                 RA.notifications.filtered = RA.notifications.filtered.filter(function(notice){
+                    var passTest = false;
                     if  (  params.bookmark  && params.bookmark === notice.bookmark
-                        || params.archive   && params.archive === notice.archive
                         || params.new       && params.new === notice.new
+                        || params.archive   && params.archive === notice.archive
                         || params.visited   && params.visited !== notice.new ) {
-                            return true;
-                        }
+                        passTest = true;
+                    }
+                    if (!params.archive && notice.archive){
+                        passTest = false;
+                    }
+                    return passTest;
                 });
             }
 
             if (params.search.length > 0){
                 var values = params.search.trim().split(' ');
-                console.log(values);
                 RA.notifications.filtered = RA.notifications.filtered.filter(function(notice){
-                    var str   = JSON.stringify(notice),
+                    var str   = JSON.stringify(notice).toLowerCase(),
                         index = 0,
                         found = false;
                     (function findMatch(){
@@ -467,9 +480,12 @@ $(function(){
                 classList = 'notification';
 
             obj.new ? addToClassList('new') : addToClassList('visited');
+            obj.archive ? addToClassList('archive') : addToClassList() ;
 
             function addToClassList (str) {
-                classList += ' '+str;
+                if (str){
+                    classList += ' '+str;
+                }
             }
 
             return `
@@ -533,13 +549,19 @@ $(function(){
         }
 
         function updateNotificationAttribute(id, key, value){
-            var notification = RA.notifications.master.find((obj) => obj._id === id);
-            notification[key] = value;
+            var masterN = RA.notifications.master.find((obj) => obj._id === id),
+                filterN = RA.notifications.filtered.find((obj) => obj._id === id);
+            [masterN, filterN].forEach(function(obj){
+                obj[key] = value;
+            });
+            console.log(masterN);
+            console.log(filterN);
+
             $.ajax({
                 method: 'PUT',
                 url: '/updateNotification',
                 contentType: 'application/json',
-                data: JSON.stringify(notification),
+                data: JSON.stringify(masterN),
                 error: function(error){ console.log(error); },
                 success: function(data){ console.log(data); }
             });

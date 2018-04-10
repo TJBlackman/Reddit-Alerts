@@ -128,8 +128,9 @@
 
                 .selected,
                 input:checked + span {
-                    color: green;
-                    border-color: green;
+                    color: white;
+                    background-color: #5cb85c;
+                    border-color: #5cb85c;
                     box-shadow: 0 0 2px transparent, inset 0 0 2px #6b6b6b;
                 }
             }
@@ -288,6 +289,13 @@
                     clear: both;
                 }
             }
+        }
+
+        .notification.new {
+            .title a { color: orangered; }
+        }
+        .notification.visited {
+            .title a { color: #4c657b; }
         }
     }
 }
