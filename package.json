@@ -12,7 +12,7 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
-    "mongoose": "^4.9.2",
+    "mongoose": "^4.13.21",
     "nodemailer": "^3.1.8",
     "request": "^2.81.0",
     "twilio": "^2.11.1",
